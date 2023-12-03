@@ -1,0 +1,13 @@
+.dash__viewtask-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+.dash__viewtask-img img{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 2px solid var(--1, #4F9CD1);
+}

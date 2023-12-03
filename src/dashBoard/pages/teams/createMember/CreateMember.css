@@ -1,0 +1,17 @@
+.dash__form-content_details-salary div{
+    position: relative;
+
+}
+
+.dash__form-content_details-salary div select{
+    position: absolute;
+    background-image:url(../../../assets//teams/dollar-circle.svg);  
+    background-position: left center;
+    background-repeat: no-repeat; 
+    background-size: 25px;
+    text-align: right;
+    width: 50px;
+
+   
+}
+

@@ -1,0 +1,38 @@
+.dash__settings{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+    
+}
+.dash__buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px 0;
+    
+}
+.dash__buttons div{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    width: 45%;
+    border-radius: 10px;
+    height: 60px;
+    color: var(--blue);
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.10);
+    cursor: pointer;
+    text-align: center;
+    
+}
+
+.clicked{
+    background-color: var(--blue) !important;
+    color: #fff !important;
+}
