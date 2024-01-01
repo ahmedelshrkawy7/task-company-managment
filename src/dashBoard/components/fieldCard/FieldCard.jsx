@@ -4,25 +4,23 @@ import './FieldCard.css'
 import dots from '../../assets/fields/more.svg'
 import user from '../../assets/fields/solar_user-rounded-linear.svg'
 import scroll from '../../assets/fields/scroll.svg'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { useContext } from 'react'
-import { serverApi } from '../../../App'
+
+import { Axios } from '../../api/Axios'
 
 
 
-const FieldCard = ({api,link,fun}) => {
+const FieldCard = ({api,link,fun,num}) => {
   const [fields ,setFields] = useState([])
 
 
- let server =useContext(serverApi)
 
 
 
   const fetch = async()=>{
-   const res = await axios({
+   const res = await Axios({
        method: "Get",
-        url: `${server}/${api}`,
+        url: `${api}`,
      })
      setFields(res.data.data.Departments || res.data.data.Subdepartments);
     }
@@ -30,12 +28,14 @@ const FieldCard = ({api,link,fun}) => {
 
   useEffect(()=>{
    fetch();
+   num(fields.length)
    
   },[])
 
   return (
     <>
     {fields.map((field)=>{
+
       
       return(
         <div className='field_card ' onClick={()=>{fun(field.id)}}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Department.css'
 import FieldCard from '../../../components/fieldCard/FieldCard'
 import Location from '../../../includes/location/Location'
@@ -18,6 +18,11 @@ const Department = () => {
     nav (`../fields/${id}`);
 
   }
+  const[numDep, setNumDep]=useState(null)
+
+  const depNum =(num)=>{
+    setNumDep(num)
+  }
 
 
 
@@ -26,21 +31,11 @@ const Department = () => {
     <>
     
     <Location main='Fields' head='Departments' />
-    <div className='dash__create'>
-      <div className='dash__create-head'>
-        
-          
-      </div>
-      <Link to='/createfield' className='dash__create-button'>
-          
-          <img src={plus} alt='plus'/>
-          <h2>Add Department</h2>
-        </Link>
-     </div>
-    <div className='dashboard__department' ref={scrollRef}>
+  
+    <div className='grid w-100 gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1'>
 
 
-      <FieldCard api='departments'   fun={navigate}/>
+      <FieldCard api='departments' num={depNum}   fun={navigate}/>
       
      
     </div>

@@ -1,0 +1,4 @@
+.member_img img:hover{
+    scale: 4;
+    transition: .5s;
+}

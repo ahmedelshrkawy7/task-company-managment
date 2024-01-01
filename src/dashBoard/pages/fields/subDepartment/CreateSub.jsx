@@ -3,9 +3,12 @@ import case1 from '../../../assets/Form/briefcase.svg'
 import bin from '../../../assets/Form/fluent_delete-28-regular.svg'
 import plus from '../../../assets/Form/icons.svg'
 import Location from '../../../includes/location/Location'
-import axios from 'axios'
+import { Axios } from '../../../api/Axios'
 import { Link } from 'react-router-dom'
 import { serverApi } from '../../../../App'
+import { notify,error } from '../../../notifications/Toast'
+import Header from '../../../components/Header/Header'
+
 
 
 
@@ -20,7 +23,6 @@ import { serverApi } from '../../../../App'
 
 
 const Createsub = () => {
-    const server = useContext(serverApi)
     let [title,setTitle] =useState([]) ;
     const[options,setOptions]=useState([])
     const[data ,setData] = useState({})
@@ -53,9 +55,9 @@ const Createsub = () => {
    }
    const fetchPost = async () => {
     try {
-     await axios({
+     await Axios({
         method: "Get",
-         url: `${server}/departments`
+         url: `/departments`
       }).then((res)=>{ setOptions(res.data.data.Departments);})
    
       
@@ -87,24 +89,26 @@ const Createsub = () => {
      submitBtn.current.click(); 
 
      
-     await axios({
+     await Axios({
       method: "post",
-      url:  `${server}/subdepartments`,
+      url:  `/subdepartments`,
       data: data ,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
         console.log(response);
+        notify('Specialization Added successfully')
       })
       .catch(function (response) {
-        console.log(response);  
+        console.log(response);
+        error('Server Error')  
       });
       
    }
    
   return (
     <>
-    <Location main='Fields' head=' Specailizations'/>
+    <Header text='Specailizations'/>
     <div className='dash__form'>
     <div className='dash__form-header' >
       <img src={case1} alt='case'/>
@@ -147,15 +151,15 @@ const Createsub = () => {
             </div>
           </div>
           </div>
-          <div className='dash__form-content_links' style={{width:'100%' ,gridTemplateColumns:'1fr 1fr 1fr 1fr'}}>
+          <div className='dash__form-content_links' style={{width:'100%' ,display:'flex'}}>
 
            {title.map((link , index1)=>{
             
             return(
-            <div className='dash__form-content_links-link' style={{width:'100%'}}>
+            <div className='dash__form-content_links-link'>
 
-            <div className='dash__form-content_links-link-a' style={{width:'165px'}}>
-              <a href={link.title} target='blank'>{link.title}</a>
+            <div className='dash__form-content_links-link-a' style={{width:'100%'}}>
+              <a href='/'>{link.title}</a>
             </div>
             <div className='dash__form-content_links-link-icon' onClick={()=>{removeLink(index1)}}>
                 <img src={bin} alt='bin'/>
@@ -177,8 +181,8 @@ const Createsub = () => {
     </form>
     
     <div className='dash__form-confirm'>
-     <Link to ='/tech'  type='submit' onClick={()=>{handleSubmit()}}>Next</Link>
-      <Link>Back</Link>
+     <Link   type='submit' onClick={()=>{handleSubmit()}}>Create</Link>
+      <Link hidden>Back</Link>
     </div>
   </div>
   </>

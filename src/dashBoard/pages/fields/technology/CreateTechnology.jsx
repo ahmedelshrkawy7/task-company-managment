@@ -4,14 +4,15 @@ import case1 from '../../../assets/Form/briefcase.svg'
 import bin from '../../../assets/Form/fluent_delete-28-regular.svg'
 import plus from '../../../assets/Form/icons.svg'
 import Location from '../../../includes/location/Location'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import logo1 from '../../../assets/Form/Frame 1171275978 1.svg'
 import camera from '../../../assets/Form/solar_camera-linear.svg'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { serverApi } from '../../../../App'
-
+import { Axios } from '../../../api/Axios'
+import { notify,error } from '../../../notifications/Toast'
+import Header from '../../../components/Header/Header'
 
 
 
@@ -49,29 +50,7 @@ const CreateTechnology = () => {
 
   
    
-  const notify = () =>toast.success('Specializations Saved Successfully', {
-   
-    position: "top-right",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-});
-  const error = () =>toast.error('Server Error', {
-   
-    position: "top-right",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-});
-   
+ 
 
    let pushLink=()=>{
 
@@ -107,7 +86,7 @@ const CreateTechnology = () => {
    const post=async()=>{
     
    
-    await axios({
+    await Axios({
       method: "post",
       url:  `${server}/technologies`,
       data: { technologies },
@@ -123,7 +102,7 @@ const CreateTechnology = () => {
    }
    const fetchPost = async () => {
     try {
-    let res= await axios({
+     await Axios({
         method: "Get",
          url: `${server}/subdepartments`
       }).then((res)=>{ setOptions(res.data.data.Subdepartments);})
@@ -169,7 +148,8 @@ const CreateTechnology = () => {
    
   return (
     <>
-    <Location main='Fields' head='Technologies'/>
+    <Header text='Technologies'/>
+
     <div className='dash__form'>
     <div className='dash__form-header' >
       <img src={case1} alt='case'/>
@@ -271,12 +251,11 @@ const CreateTechnology = () => {
     
     <div className='dash__form-confirm'>
      <Link   type='submit' onClick={()=>{handleSubmit()}}>Create</Link>
-      <Link>Back</Link>
+      <Link hidden >Back</Link>
      
     </div>
    
   </div>
-  <ToastContainer />
   
   </>
   )

@@ -9,13 +9,13 @@ import plus from '../../../assets/Form/icons.svg'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { serverApi } from '../../../../App'
-import Addinput from '../../../includes/Addinput/Addinput'
-import Selectinput from '../../../includes/selectinput/Selectinput'
+import Addinput from '../../../components/Addinput/Addinput'
+import Selectinput from '../../../components/selectinput/Selectinput'
 import { IoIosClose } from "react-icons/io";
 import word from '../../../assets/Form/svgexport-18 1.svg'
 import  p  from '../../../assets/Form/svgexport-10 (18) 1.svg'
 import rar  from '../../../assets/Form/svgexport-6 (2) 1.svg'
-import Addattchments from '../../../includes/Addattachments/Addattachments'
+import Addattchments from '../../../components/Addattachments/Addattachments'
 
 
 
@@ -41,14 +41,13 @@ const Phase = () => {
    let [obj_view,setObj_view] = useState({})
    let [obj_api,setObj_api] = useState({ }) ;
 
-   console.log(obj_api);
+   console.log(subdepartments);
   //  console.log(obj_view);
     
                                       
                                     
                                 
 
-  console.log(obj_api)
    
 
    let submitBtn = useRef(0);
@@ -487,7 +486,7 @@ const Phase = () => {
       </form>
       
       <div className='dash__form-confirm'>
-       <Link   type='submit' onClick={()=>{handleSubmit()}} state={{width:'160px'}}>Save & Create New </Link>
+        <Link   type='submit' onClick={()=>{handleSubmit()}} style={{width:'160px'}}>Save & Create New </Link>
         <Link>back</Link>
         
       </div>

@@ -1,3 +1,5 @@
+
+
 import icon1 from '../../assets/category-2.svg'
 import icon2 from '../../assets/briefcase.svg'
 import icon3 from '../../assets/task.svg'
@@ -8,8 +10,8 @@ import icon7 from '../../assets/circle.svg'
 import icon8 from '../../assets/bezier.svg'
 import arrowR from '../../assets/menu.svg'
 import arrowD from '../../assets/arrow-down.svg'
-
 import logo from '../../assets/2023 alexon logo.svg'
+
 
 
 export {

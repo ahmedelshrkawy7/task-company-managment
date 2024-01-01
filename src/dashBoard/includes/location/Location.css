@@ -2,15 +2,16 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
-  margin: 0rem 0;
+  gap: 14px;
+  align-items: flex-start;
+  margin: 1rem 0;
 }
 .dash__location div h2{
   color: #797979;
-font-family: var(--my_font);
-font-size: 20px;
-font-weight: 400;
-letter-spacing: 0.24px;
+  font-family: var(--my_font);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.24px;
 
 }
 .dash__location div h2:last-child{
@@ -25,41 +26,32 @@ letter-spacing: 0.24px;
   padding: 2px 14px;
   align-items: center;
   border-radius: 17px;
-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
 
 }
 .dash__create{
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin: .5rem 0 1.5rem 0;
-  align-self: flex-end;
-  width: 100% ;
 }
 .dash__create-head{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
   
 
 }
 .dash__create-head h2{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-font-family: var(--my_font);
-font-size: 32px;
-font-weight: 500;
+  
+  color: var(--textcolor);
+  font-size: 22px;
+  font-weight: 400;
 }
 .dash__create-head h4{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #797979;
-font-family: var(--my_font);
-font-weight: 500;
+  color: rgba(41, 45, 50, 0.85);
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: 400;
 }
 .dash__create-head h4::first-letter{
   
@@ -81,6 +73,7 @@ padding: 2.75px 2.25px;
   border: 2px solid var(--blue);
   background: var(--5, rgba(79, 156, 209, 0.10));
   gap: 10px;
+  cursor: pointer;
 }
 .dash__create-button h2{
   color: var(--blue);

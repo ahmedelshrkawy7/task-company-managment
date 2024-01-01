@@ -3,9 +3,10 @@ import case1 from '../../../assets/Form/briefcase.svg'
 import bin from '../../../assets/Form/fluent_delete-28-regular.svg'
 import plus from '../../../assets/Form/icons.svg'
 import Location from '../../../includes/location/Location'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { serverApi } from '../../../../App'
+import { notify,error } from '../../../notifications/Toast'
+import { Axios } from '../../../api/Axios'
 
 
 
@@ -20,6 +21,8 @@ import { serverApi } from '../../../../App'
 
 
 const Createfield = () => {
+
+  
   const server = useContext(serverApi)
   let [title,setTitle] =useState([]) ;
    
@@ -58,7 +61,7 @@ const Createfield = () => {
     
      submitBtn.current.click(); 
      
-     await axios({
+     await Axios({
       method: "post",
       url:   `${server}/departments`,
       data: {title},
@@ -66,16 +69,18 @@ const Createfield = () => {
     })
       .then(function (response) {
         console.log(response);
+        notify('Department Added successfully')
       })
       .catch(function (response) {
-        console.log(response);  
+        console.log(response); 
+        error('server Error') 
       });
       
    }
    
   return (
     <>
-    <Location/>
+    <Location head='Create Department' main='Departments'/>
     <div className='dash__form'>
     <div className='dash__form-header' >
       <img src={case1} alt='case'/>
@@ -127,7 +132,7 @@ const Createfield = () => {
     </form>
     
     <div className='dash__form-confirm'>
-     <Link to ='/Departlist'  type='submit' onClick={()=>{handleSubmit()}}>create</Link>
+     <Link to ='/Department'  type='submit' onClick={()=>{handleSubmit()}}>create</Link>
       <Link to='/Department'>back</Link>
       
     </div>

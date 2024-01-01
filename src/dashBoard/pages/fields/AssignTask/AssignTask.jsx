@@ -8,15 +8,14 @@ import camera from '../../../assets/Form/solar_camera-linear.svg'
 import trash from '../../../assets/Form/trash.svg'
 import material from '../../../assets/Form/material-symbols_zoom-out-map-rounded.svg'
 import logo1 from '../../../assets/Form/Frame 1171275978 1.svg'
-import axios from 'axios'
 import  pdf  from '../../../assets/Form/pdf.svg'
 import Location from '../../../includes/location/Location'
 import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Axios } from '../../../api/Axios'
 
 const AssignTask = () => {
-  let server ='http://216.219.83.182/Alexon_Management/public/api' ;
 
    let [links,setLinks] =useState([]) ;
    let [images,setImages] =useState([]) ;
@@ -104,9 +103,9 @@ const AssignTask = () => {
      
     
      submitBtn.current.click(); 
-     await axios({
+     await Axios({
       method: "post",
-      url: server+ "/projects",
+      url: "/projects",
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     })

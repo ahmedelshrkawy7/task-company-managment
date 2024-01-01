@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { Component, useEffect,useContext } from 'react';
 import { serverApi } from '../../../../App';
+import { Axios } from '../../../api/Axios';
 
 
 
@@ -9,7 +9,7 @@ const Carddetails = () => {
     const server = useContext(serverApi)
 
     const fetchPost=async()=>{
-        await axios({
+        await Axios({
             url: `${server}/subdepartments`,
             method:'Get' ,
 

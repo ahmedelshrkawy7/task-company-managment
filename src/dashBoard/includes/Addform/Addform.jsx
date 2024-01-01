@@ -1,20 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import case1 from '../../assets/Form/briefcase.svg'
 import bin from '../../assets/Form/fluent_delete-28-regular.svg'
 import plus from '../../assets/Form/icons.svg'
-import Location from '../location/Location'
-import axios from 'axios'
+import { Axios } from '../../api/Axios'
 import { Link } from 'react-router-dom'
-import { serverApi } from '../../../App'
-import Addinput from '../Addinput/Addinput'
-
-
-
-
-
-
-
-
+import { notify,error } from '../../notifications/Toast'
+import Location from '../location/Location'
+import Header from '../../components/Header/Header'
 
 
 
@@ -22,11 +14,6 @@ import Addinput from '../Addinput/Addinput'
 
 const Addform = ({header,placeholder, api ,arrName}) => {
 
-
-  const server =useContext(serverApi)
-
-  console.log({api})
-  console.log({arrName})
 
   let [title,setTitle] =useState([]) ;
   
@@ -69,17 +56,19 @@ const Addform = ({header,placeholder, api ,arrName}) => {
 
      
      submitBtn.current.click(); 
-     await axios({
+     await Axios({
       method: "post",
-      url:  `${server}/${api}`,
-      data: { [arrName] : title} ,
+      url:  `/${api}`,
+      data: { [arrName] : title } ,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
+        notify(`${arrName} added successfully`)
         console.log(response);
       })
       .catch(function (response) {
         console.log(response);  
+        error(`Server Error`)
       });
       
    }
@@ -95,6 +84,9 @@ const Addform = ({header,placeholder, api ,arrName}) => {
    
   return (
     <>
+
+    <Header text={header}/>
+
     <div className='dash__form'>
       <div className='dash__form-header' >
         <img src={case1} alt='case'/>

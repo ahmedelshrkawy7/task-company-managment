@@ -3,8 +3,8 @@ import Location from '../../../includes/location/Location';
 import task from '../../../assets/fields/task.svg'
 import pen from '../../../assets/fields/edit-2.svg'
 import trash from '../../../assets/fields/trash.svg'
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Axios } from '../../../api/Axios';
 
 
 const Departlist = () => {
@@ -14,7 +14,7 @@ const Departlist = () => {
 
     const fetchPost = async () => {
         try {
-          const response = await axios({
+          const response = await Axios({
             method: "Get",
              url: "http://216.219.83.182/Alexon_Management/public/api/technologies",
           });

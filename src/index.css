@@ -13,13 +13,44 @@ body,
 :root{
   --blue :#1370E4 ;
   --my_font : 'Lato', sans-serif;
+  --card_shadow:     var(--ds-shadow-raised, 0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px 0 rgba(9, 30, 66, 0.31));
+  --card_hover:     rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   --toastify-color-success:var(--blue) !important ;
   --toastify-icon-color-success:var(--blue) !important;
 }
 
+[color-scheme="light"]{
+  --blue :#1370E4 ;
+  --backgroundSpan:#1370E4 ;
+  --my_font : 'Lato', sans-serif;
+  --background: #efefef;
+  --backgroundCard:#fff ;
+  --backgroundBar:#fff ;
+  --backgroundNav:#efefef ;
+  --textcolor:#000 ;
+  --card_shadow: var(--ds-shadow-raised, 0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px 0 rgba(9, 30, 66, 0.31));
+
+  
+}
+[color-scheme="dark"]{
+  --blue :#fff;
+  --backgroundSpan:#121212 ;
+  --my_font : 'Lato', sans-serif;
+  --background: #121212;
+  --backgroundCard:#1d1d1d ;
+  --backgroundBar:#1d1d1d ;
+  --backgroundNav:#0db0b6 ;
+  --textcolor:#fff ;
+
+
+
+
+}
+
+
 
 ::-webkit-scrollbar{
-  width: 5px;
+  width: 0;
  height: 4px;
 }
 ::-webkit-scrollbar-button{
@@ -31,12 +62,12 @@ body,
   background: #e0e0e0;
 
 }
-::-webkit-scrollbar-thumb{
+/* ::-webkit-scrollbar-thumb{
   background: var(--blue);
   
-}
+} */
 ::-webkit-scrollbar-thumb:hover{
-  background: #555;
+  background: var(--blue);
  
 
 }
@@ -46,10 +77,12 @@ body,
   padding: 0;
   margin: 0;
   scroll-behavior: smooth;
+  transition: .2s;
 }
 
 p,h1,h2,h3,h4,h5{
   margin: 0;
+  color: var(--textcolor);
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
   
@@ -129,6 +162,19 @@ a{
   grid-template-columns: .8fr 1fr 1fr 1fr;
   grid-template-rows: .2fr 3fr;
   grid-template-areas:'sidebar nav nav nav' 'sidebar main main main' ;
+}
+
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+  color: var(--blue);
+}
+progress::-webkit-progress-value {
+    background-color: var(--blue);
+    border-radius: 10px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
 }
 @media only screen and (max-width:978px){
   .container{

@@ -11,8 +11,8 @@ import email from '../../../assets/teams/mdi-light_email.svg'
 import hours from '../../../assets/teams/prime_stopwatch.svg'
 import salary from '../../../assets/teams/material-symbols_attach-money.svg'
 import phone from '../../../assets/teams/solar_phone-outline.svg'
-import axios from 'axios';
 import { serverApi } from '../../../../App';
+import { Axios } from '../../../api/Axios';
 
 
 
@@ -26,7 +26,7 @@ const  Member_details = ({toggle,employeeId}) => {
 
     const fetchEmployee=async()=>{
         try {
-          await axios({
+          await Axios({
             method: "Get",
              url: `${server}/employees/${employeeId}`,
           }).then((res)=> {setEmployee( res.data.data.employee );});

@@ -8,68 +8,96 @@ import plus from '../../../assets/Form/icons.svg'
 import camera from '../../../assets/Form/solar_camera-linear.svg'
 import trash from '../../../assets/Form/trash.svg'
 import material from '../../../assets/Form/material-symbols_zoom-out-map-rounded.svg'
+import Selectinput from '../../../components/selectinput/Selectinput'
+import { Axios } from '../../../api/Axios'
 import logo1 from '../../../assets/Form/Frame 1171275978 1.svg'
-import axios from 'axios'
-import  pdf  from '../../../assets/Form/pdf.svg'
-import  p  from '../../../assets/project/svgexport-18 1.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { serverApi } from '../../../../App'
-import Addattachments from '../../../includes/Addattachments/Addattachments'
+import Addattachments from '../../../components/Addattachments/Addattachments'
+import { useFormik } from 'formik'
+import { notify,error } from '../../../notifications/Toast'
+import * as Yup from 'yup'
 
 const CreateForm = () => {
+
+  const navigate =useNavigate()
+
+  const validationSchema = Yup.object().shape({
+    // Define validation rules for each input
+    // personal: Yup.object().shape({
+    //   title: Yup.string().required('title is required'),
+    //   lastName: Yup.string().required('Last Name is required'),
+    // }),
+    // address: Yup.object().shape({
+    //   street: Yup.string().required('Street is required'),
+    //   city: Yup.string().required('City is required'),
+    //   state: Yup.string().required('State is required'),
+    //   zip: Yup.string().required('Zip Code is required'),
+    // }),
+  
+  title: Yup.string('title shuold be string').required('required *'),
+  start: Yup.string('start date shuold be string').required('required *'),
+  end: Yup.string('deadline shuold be string').required('required *'),
+  type: Yup.string('type shuold be string').required('required *'),
+  status: Yup.string('type shuold be string').required('required *'),
+  select: Yup.string('type shuold be string').required('required *'),
+  // status: Yup.required('required *'),
+
+
+  
+  });
+
+  const formik = useFormik({
+    initialValues:{
+      title:'',
+    description: '' , 
+    status: 'delay',
+    type :'',
+    start: '' ,
+    end : '',
+    attachments: [], 
+    logo: '', 
+    links : [],
+    technologies:[]
+    },
+    validationSchema:validationSchema,
+    validateOnChange:true,
+    validateOnBlur:true ,
+    validate:(values)=>{ console.log(values)},
+    onSubmit:(values)=>{
+      handleSubmit();
+      navigate('/Project List')
+      
+    }
+  })
 
   
   const server =useContext(serverApi)
 
    let [links,setLinks] =useState([]) ;
    let [technology,setTechnology] =useState([]) ;
-   let [images,setImages] =useState([]) ;
    let [logoImage,setlogoImages] = useState() ;
-   let [Attachments,setAttachments] = useState([]) ;
    let [technologies,setTechnologies] = useState([]) ;
    
    let linkinput = useRef(0);
    let techinput = useRef(0);
-   let fileInput = useRef('');
    let logoImg = useRef(0);
    let submitBtn = useRef(0);
 
-   let [data ,setData ] =  useState( { 
- 
-    title :'' ,
-    description: '' , 
-    status: 'On going',
-    type :'',
-    start: '' ,
-    end : '',
-    attachments: Attachments , 
-    logo: '', 
-    links : [],
-    technologies:[]
-   })
+   
   
-   console.log(technologies)
 
 
 
-
-   const handleChange = (e) => {
-
-    const value = e.target.value;
-     setData({
-      ...data,
-     [e.target.name]: value
-     });
-  };
-
+   
 
 
 
   const fetchPost = async () => {
     try {
-      await axios({
+      await Axios({
         method: "Get",
-         url: `${server}/technologies`,
+         url: `/technologies`,
       }).then((res)=> {setTechnologies( res.data.data.Technologies )});
 
      
@@ -85,15 +113,12 @@ const CreateForm = () => {
 
     const updateData =(Allattachments)=>{
 
-      setData( { ...data ,  attachments :[ ...Allattachments]} )
+      formik.setFieldValue('attachments',  Allattachments  )
+
     }
 
 
-  useEffect(()=>{
-    setData( { ...data ,  attachments :[ ...Attachments]} )
-    ;
-  },[Attachments]);
-
+ 
    
 
   let push=(str,inputName)=>{
@@ -103,9 +128,9 @@ const CreateForm = () => {
        switch(inputName){
 
            case 'link' :
-              let arr = [...links,str];
+           
               setLinks((prev)=> [...prev ,str]);
-              setData({...data , links : arr})
+              formik.setFieldValue('links',[...formik.values.links , str ])
               linkinput.current.value=''
            break ;   
 
@@ -115,11 +140,10 @@ const CreateForm = () => {
                setTechnology((prev)=>[...prev , str]);
                
 
-              let index = techinput.current.selectedIndex;
+              
 
-              let arr1 = [...technology, index];
  
-               setData({...data , technologies : arr1})
+             
 
            break ;    
        }
@@ -131,70 +155,64 @@ const CreateForm = () => {
 
    switch(inputName){
        case 'link' :
-           setLinks(links.filter(( word ,index)=>{return (index1 !== index)}))
+           setLinks(links.filter(( word ,index)=>{return (index1 !== index)}));
+           formik.setFieldValue('links',  formik.values.links.filter(( word ,index)=>{return (index1 !== index)})  )
+
        break ;    
        case 'tech' :
-            setTechnology(technology.filter(( word ,index)=>{return (index1 !== index)}))
+            setTechnology(technology.filter(( word ,index)=>{return (index1 !== index)}));
+            formik.setFieldValue('technologies',  formik.values.technologies.filter(( word ,index)=>{return (index1 !== index)})  )
+
        break ;    
    }
     
  }
 
 
-   let removeAttach=(index2)=>{
-      setImages(images.filter(( word ,index)=>{return (index2 !== index)}));
-      setAttachments(Attachments.filter((attach,index)=>{return(index2 !== index)}) );
-      console.log(Attachments)
-      
-   }
+  
  
    const handleSubmit= async()=>{ 
      
     
-     submitBtn.current.click(); 
-     console.log(data); 
-     await axios({
+      console.log(formik.values);
+     await Axios({
       method: "post",
-      url: `${server}/projects`,
-      data: data,
+      url: `/projects`,
+      data: formik.values ,
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then(function (response) {
         console.log(response);
+        notify('Project added successfully')
       })
       .catch(function (response) {
-        console.log(response);  
+        console.log(response); 
+        error('Server Error')
       });
       
    }
+
+
+
    
 
   return (
     <>
-    <Location head=' Create Project'/>
-    <div className='dash__create'>
-      <div className='dash__create-head'>
-        
-          
-      </div>
-      <div className='dash__create-button'>
-          <img src={plus} alt='plus'/>
-          <h2>Create new project</h2>
-        </div>
-     </div>
+    <Location main='Projects' head=' Create Project'/>
+  
     <div className='dash__form'>
       <div className='dash__form-header' >
         <img src={case1} alt='case'/>
         <p style={{color:'#fff'}}>Create New Project</p>
       </div>
-      <form>
+      <form onSubmit={formik.handleSubmit} className='needs-validation' novalidate>
         <div className='dash__form-logo'>
           <div  className='dash__form-logo-img'>
-            <img src={logoImage? logoImage:logo1} alt='logo'/>
+            <img src={logoImage || logo1} alt='logo'/>
           </div>
           <div className='flex' style={{gap:'10px'}} onClick={()=>{logoImg.current.click() }}>
-            <input name='logo' type="file" accept='image/*' hidden ref={logoImg} 
-            onChange={({target:{files}})=>{setlogoImages(URL.createObjectURL(files[0])); setData( {...data ,  logo :files[0]} ) }}/>
+            <input  name='logo' type="file" accept='image/*' hidden ref={logoImg} 
+            onChange={({target:{files}})=>{setlogoImages(URL.createObjectURL(files[0])); formik.setFieldValue('logo',files[0]) ; }}/>
             <img src={camera} alt='camera' style={{width:'18px'}}/>
             <p>Upload Logo</p>
           </div> 
@@ -208,38 +226,44 @@ const CreateForm = () => {
             <div className='dash__form-content_details'>
             <div  style={{width:'75%'}}>
               <p>Project Name</p>
-              <input name='title' type='text'  onChange={handleChange}></input>
+              <input name='title' type='text'  onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.title}></input>
+              
+              <span className="error">{formik.touched.title &&formik.errors.title}</span>
             </div>
             
             <div>
               <p>Start Date</p>
-              <input name='start' type='date' onChange={handleChange}></input>
+              <input name='start'  type='date'  onChange={formik.handleChange} onBlur={formik.handleBlur}></input>
+              <span className="error">{formik.touched.start && formik.errors.start }</span>
             </div>
             
             <div>
               <p>Deadline</p>
-              <input name='end' type='date' onChange={handleChange} ></input>
+              <input name='end' type='date'  onChange={formik.handleChange} onBlur={formik.handleBlur} ></input>
+              <span className="error">{formik.touched.end && formik.errors.end }</span>
             </div>
             <div>
               <p>Status</p>
-              <select name='status' >
+              <select name='select'  onChange={formik.handleChange} onBlur={formik.handleBlur}value={formik.values.status}>
                
-                <option value="1">Completed</option>
-                <option value="2">Delayed</option>
-                <option value="3">On going</option>
-                <option value="4">At risk</option>
+                <option >Completed</option>
+                <option >Delayed</option>
+                <option >in Progress</option>
+               
               </select>
+              <span className="error">{formik.touched.select && formik.errors.select }</span>
             </div>
             <div>
               <p>Project type</p>
-              <input type='text' name='type'  onChange={handleChange}/>
-              
+              <input type='text' name='type'  onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+              <span className="error">{formik.touched.type && formik.errors.type }</span>
+
             </div>
             <div>
               <p>Project links</p>
               <div style={{display:'flex' ,flexDirection:'row',justifyContent:'flex-start',gap:'20px',alignItems:'center'}}>
-                <input type='url' ref={linkinput} ></input>
-                <div className='addLink' onClick={()=>{push(linkinput.current.value , 'link')}}   ><img src={plus} alt='addlink'/></div>
+                <input  ref={linkinput} ></input>
+                <div className='addLink' onClick={()=>{push(linkinput.current.value , 'link'); }}   ><img src={plus} alt='addlink'/></div>
               </div>
             </div>
            { links[0] && <div className='dash__form-content_links' style={{width:'100%'}}>
@@ -267,8 +291,9 @@ const CreateForm = () => {
             <div>
               <p>Technologies</p>
               <div style={{display:'flex' ,flexDirection:'row',justifyContent:'flex-start',gap:'20px',alignItems:'center'}}>
-                <select type='url' name='' ref={techinput}>
+                <select type='url' name='' ref={techinput} >
                         
+                  <option selected hidden value=''>- select technology -</option>
                   {technologies?.map((tech)=>{
 
                     return(
@@ -283,9 +308,11 @@ const CreateForm = () => {
                   
                 </select>
 
-
-                <div className='addLink' onClick={(e)=>{push( techinput.current.value , 'tech')}}   ><img src={plus} alt='addlink'/></div>
+                <div className='addLink' onClick={(e)=>{push( techinput.current.value , 'tech'); formik.setFieldValue('technologies',[...formik.values.technologies , techinput.current.selectedIndex])}}   ><img src={plus} alt='addlink'/></div>
               </div>
+
+             
+
             </div>
             { technology[0] && <div className='dash__form-content_links' style={{width:'100%'}}>
 
@@ -323,17 +350,18 @@ const CreateForm = () => {
                 <p>Project Details</p>
               </div>
               <div className='dash__form-content_projdetails-input'>
-               <textarea rows="4" cols="50" name='description' onChange={handleChange}></textarea> 
-                  {/* <input rows="4" cols="50" type='text'name='description' onChange={handleChange} /> */}
+               <textarea rows="4" cols="50" name='description'  onBlur={formik.handleChange}></textarea> 
+                  {/* <input rows="4" cols="50" type='text'name='description' onBlur={handleChange} /> */}
               </div>
           </div>
 
         </div>
-         <button type='sumbit' hidden ref={submitBtn} onClick={(e)=> e.preventDefault()}></button>
+         <button type='submit' hidden ref={submitBtn}></button>
       </form>
       
+      
       <div className='dash__form-confirm'>
-       <Link to ='/projects/projectlist'  type='submit' onClick={()=>{handleSubmit()}}>create</Link>
+        <Link  type='submit' onClick={()=>{submitBtn.current.click()}}>create</Link>
         <Link>back</Link>
         
       </div>

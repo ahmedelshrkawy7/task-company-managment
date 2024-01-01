@@ -1,4 +1,3 @@
-import {useFormik} from 'formik'
 
 import Location from '../../../includes/location/Location';
 import React, { useEffect, useRef, useState ,useContext} from 'react'
@@ -9,36 +8,22 @@ import camera from '../../../assets/Form/solar_camera-linear.svg'
 import logo1 from '../../../assets/Form/Frame 1171275978 1.svg'
 import bin from '../../../assets/Form/fluent_delete-28-regular.svg'
 import dollar from '../../../assets/teams/dollar-circle.svg'
-import axios from 'axios'
-import { Link } from 'react-router-dom'
-import { serverApi } from '../../../../App';
-import Selectinput from '../../../includes/selectinput/Selectinput';
-import Addinput from '../../../includes/Addinput/Addinput';
+import { Link, useNavigate } from 'react-router-dom'
+import Selectinput from '../../../components/selectinput/Selectinput'
+import { Axios } from '../../../api/Axios';
+import * as Yup from 'yup'
+import { useFormik } from 'formik';
+import { notify,error } from '../../../notifications/Toast';
 
 
 const CreateMember = () => {
 
 
 
-  const formik = useFormik({
-    initialvalue:{
-     
-    first_name :'' ,
-    last_name: '' , 
-    
-    },
-    onSubmit:(values)=>{
-      console.log('hi')
-    },
-
-  })
-    
-  const server =useContext(serverApi)
 
   let [phone,setPhone] =useState([]) ;
   let [technology,setTechnology] =useState([]) ;
   let [selecttechnology,setSelectTechnology] =useState([]) ;
-  let [images,setImages] =useState([]) ;
   let [logoImage,setlogoImages] = useState() ;
 
   let [positions,setPositions] = useState([]) ;
@@ -51,79 +36,112 @@ const CreateMember = () => {
   let [governorate,setGovernorate] = useState([]) ;
 
 
-//   console.log(technology)
   
   let phoneInput = useRef(0);
   let techInput = useRef(0);
-  let fileInput = useRef('');
   let logoImg = useRef(0);
   let submitBtn = useRef(0);
+  let currency = useRef(0);
 
-  let [data ,setData ] =  useState( { 
+  const navigate  = useNavigate()
 
-    first_name :'' ,
-    last_name: '' , 
-    experience: 'On going',
-    gender_id: '2',
-    position_id: '2',
-    image: '',
-    WorkType_id: '3',
-    email:'',
-    mobile:[],
-    workhours:8 ,
-    salary:'5000' ,
-    currency_id: '1' ,
-    technologies:[],
-    departments:[],
-    subdepartments:[],
-    
+  const validationSchema = Yup.object().shape({
+ 
+    first_name: Yup.string('first_name shuold be string').required('first_name is required *'),
+  
+  });
+
+
+  const formik = useFormik({
+    initialValues:{
+      first_name :'' ,
+      last_name: '' , 
+      experience: '',
+      gender_id: '',
+      position_id: '',
+      image: '',
+      WorkType_id: '',
+      email:'',
+      mobile:[],
+      workhours: '' ,
+      salary:'' ,
+      currency_id: '' ,
+      technologies:[],
+      departments:[],
+      subdepartments:[],
+    },
+    validationSchema:validationSchema,
+
+    onSubmit:(values)=>{
+      console.log(values)
+      console.log('values')
+      handleSubmit();
+      // navigate('/projects/projectlist')
+      
+    }
   })
 
-  console.log(data)
  
 
-
-  const handleChange = (e) => {
-
-    const value = e.target.value;
-    console.log(value)
-
-        setData({
-        ...data,
-        [e.target.name]: value
-        });
+  
 
 
- };
+//   const handleChange = (e) => {
+
+//     const value = e.target.value;
+//     console.log(value)
+
+//         setData({
+//         ...data,
+//         [e.target.name]: value
+//         });
+
+
+//  };
   const handleIndex = (e) => {
 
-   const value = e.target.selectedIndex;
+   let index = e.target.childNodes[e.target.selectedIndex].getAttribute('name')
 
-        setData({
-        ...data,
-        [e.target.name]: value
-        });
+   console.log(e.target.name);
+
+   formik.setFieldValue( [e.target.name], index)
+
+
+        // setData({
+        // ...data,
+        // [e.target.name]: value
+        // });
 
 
  };
+  const handleIndexes = (e) => {
 
- const handleChangeArray=(e)=>{
-    const value = e.target.value;
-    const name = e.target.name;
+    const name = e.target.name
+    const index =e.target.selectedIndex
+    const id = e.target.childNodes[index].getAttribute('name')
+
+   formik.setFieldValue( [name], [...formik.values[name],id])
+        
+
+ };
+
+//  const handleChangeArray=(e)=>{
+//     const value = e.target.value;
+//     const name = e.target.name;
 
 
-        setData({
-        ...data,
-        [e.target.name]: value
-        });
+//         setData({
+//         ...data,
+//         [e.target.name]: value
+//         });
 
 
- }
- const updateArray =(array , name  )=>{
+//  }
+//  const updateArray =(array , name  )=>{
 
 
-  setData((prev)=>{return ({ ...prev ,  [name] : [...array]})}  )
-}
+//   setData((prev)=>{return ({ ...prev ,  [name] : [...array]})}  )
+// }
 
 
  
@@ -138,7 +156,7 @@ const CreateMember = () => {
 
         const endpoints =['positions','worktypes','genders','currencies','departments','governments','technologies']
         try {
-            Promise.all(endpoints.map((endpoint) => axios.get(`${server}/${endpoint}`))).then(([{data: positions}, {data: work_type}, {data: gender}, {data: currencies},{data:departments},{data :governorate},{data:technologies}] )=> {
+            Promise.all(endpoints.map((endpoint) => Axios.get(`/${endpoint}`))).then(([{data: positions}, {data: work_type}, {data: gender}, {data: currencies},{data:departments},{data :governorate},{data:technologies}] )=> {
                setPositions(positions.data.Positions);
                setWorktype(work_type.data.Types);
                setGender(gender.data.allgenders);
@@ -176,31 +194,35 @@ const CreateMember = () => {
               
                 let arr = [...phone, ref.current.value];
                 setPhone([...phone , ref.current.value]);
-                setData({...data , mobile : arr})
+                formik.setFieldValue('mobile',arr)
+                phoneInput.current.value =''
             break ;   
 
 
             case 'tech' :
                
                 setTechnology([...technology , ref.current.value]);
-                setData({...data , technologies : [...data['technologies'], ref.current.selectedIndex+1]})
+
+                // setData({...data , technologies : [...data['technologies'], ref.current.selectedIndex]})
 
             break ;    
             case 'department' :
                 
                 setSelectedDep([...selectedDep, ref.target.value]);
 
-                setData({...data , departments : [...data['departments'],  ref.target.selectedIndex+1]})
+
+                // setData({...data , departments : [...data['departments'],  ref.target.selectedIndex]})
 
             break ;    
             case 'spec' :
                 
                 setSelectedSpec([...selectedSpec, ref.target.value]);
 
-                setData({...data , subdepartments : [...data['subdepartments'],  ref.target.selectedIndex+1]})
+                // setData({...data , subdepartments : [...data['subdepartments'],  ref.target.selectedIndex]})
 
             break ;    
              
+            default:;
         }
     
      }
@@ -214,22 +236,25 @@ const CreateMember = () => {
         break ;    
         case 'tech' :
              setTechnology(technology.filter(( word ,index)=>{return (index1 !== index)}))
-             setData({...data , technologies : data['technologies'].filter((word,index)=>{return(index1 !== index )   })  })
+             
+             formik.setFieldValue('technologies',formik.values.technologies.filter((word,index)=>{return(index1 !== index )   }))
 
         break ;    
         case 'dep' :
              setSelectedDep(selectedDep.filter(( word ,index)=>{return (index1 !== index)}))
-             setData({...data , departments : data['departments'].filter((word,index)=>{return(index1 !== index )   })  })
+             formik.setFieldValue('departments',formik.values.departments.filter((word,index)=>{return(index1 !== index )   }))
+
+
 
         break ;    
         case 'spec' :
 
              setSelectedSpec(selectedSpec.filter(( word ,index)=>{return (index1 !== index)}))
+             formik.setFieldValue('subdepartments',formik.values.subdepartments.filter((word,index)=>{return(index1 !== index )   }))
 
-             setData({...data , subdepartments : data['subdepartments'].filter((word,index)=>{return(index1 !== index )   })  })
-             
-
-        break ;    
+        break ; 
+        
+        default:;
     }
      
   }
@@ -241,19 +266,16 @@ const CreateMember = () => {
 
     
    
-    submitBtn.current.click(); 
-    console.log(data); 
-    await axios({
+    await Axios({
      method: "post",
-     url: `${server}/employees`,
-     data: data,
-     headers: { "Content-Type": "multipart/form-data" },
+     url: `/employees`,
+     data: formik.values,
    })
      .then(function (response) {
-       console.log(response);
+       notify('Member created successfully')
      })
      .catch(function (response) {
-       console.log(response);  
+       error('Server Error')
      });
      
   }
@@ -261,20 +283,20 @@ const CreateMember = () => {
         
         
     <>
-    <Location head=' Teams'/>
+    <Location head='Add Employee' main='Teams'/>
     <div className='dash__form'>
       <div className='dash__form-header' >
         <img src={case1} alt='case'/>
         <p style={{color:'#fff'}}>Create New Member</p>
       </div>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} >
         <div className='dash__form-logo'>
           <div  className='dash__form-logo-img'>
             <img src={logoImage? logoImage:logo1} alt='logo'/>
           </div>
           <div className='flex' style={{gap:'10px'}} onClick={()=>{logoImg.current.click() }}>
             <input name='logo' type="file" accept='image/*' hidden ref={logoImg} 
-            onChange={({target:{files}})=>{setlogoImages(URL.createObjectURL(files[0])); setData( {...data ,  image :files[0]} ) }}/>
+            onChange={({target:{files}})=>{setlogoImages(URL.createObjectURL(files[0])); formik.setFieldValue('image',files[0]) }}/>
             <img src={camera} alt='camera' style={{width:'18px'}}/>
             <p>Upload Logo</p>
           </div> 
@@ -286,27 +308,32 @@ const CreateMember = () => {
 
             <div>
               <p>First Name</p>
-              <input name='first_name' type='text'  onChange={handleChange}></input>
+              <input name='first_name' type='text'  onChange={formik.handleChange} onBlur={formik.handleBlur}placeholder='First Name'></input>
+              <span className='error'>{formik.touched.first_name && formik.errors.first_name}</span>
             </div>
 
             <div>
               <p>Last Name</p>
-              <input name='last_name' type='text'  onChange={handleChange}></input>
+              <input name='last_name' type='text'   onChange={formik.handleChange}onBlur={formik.handleBlur}placeholder='Last Name'></input>
+              <span className='error'>{formik.touched.last_name && formik.errors.last_name}</span>
+
             </div>
 
             <div>
               <p>Email</p>
-              <input name='email' type='text'  onChange={handleChange}></input>
+              <input name='email' type='text'  onChange={formik.handleChange}onBlur={formik.handleBlur}placeholder='Email'></input>
+              <span className='error'>{formik.touched.email && formik.errors.email}</span>
+
             </div>
 
             <div>
               <p>Phone Number</p>
               <div style={{display:'flex' ,flexDirection:'row',justifyContent:'flex-start',gap:'20px',alignItems:'center'}}>
-                <input type='url' ref={phoneInput} ></input>
+                <input type='text' ref={phoneInput} placeholder='Phone Number' ></input>
                 <div className='addLink' onClick={()=>{push(phoneInput, 'phone')}}   ><img src={plus} alt='addlink'/></div>
               </div>
             </div>
-
+{phone[0]&&
             <div className='dash__form-content_links' style={{width: '100%'}}> 
 
                  { phone.map((link , index1)=>{
@@ -329,18 +356,19 @@ const CreateMember = () => {
             
 
             </div>
-
+}
             <div>
               <p>Work Hours</p>
-              <input name='workhours' type='text'  onChange={handleChange}></input>
+              <input name='workhours' type='text'   onChange={formik.handleChange} onBlur={formik.handleBlur}placeholder='Work Hours'></input>
+              <span className='error'>{formik.touched.workhours && formik.errors.workhours}</span>
             </div>
             
             <div>
               <p>Position</p>
-              <select name='position_id' >
+              <select name='position_id' onChange={formik.handleChange} >
 
+                <option selected hidden>-- select position --</option>
                 {positions.map((position)=>{
-
                    return(
                     <option value={position.id}>{position.title}</option>
                    )
@@ -353,18 +381,20 @@ const CreateMember = () => {
             
             <div>
               <p>Start date</p>
-              <input name='experience' type='date' onChange={handleChange} ></input>
+              <input name='experience' type='date'  onBlur={formik.handleChange} ></input>
             </div>
+          
 
             <div className='dash__form-content_details-salary'>
               <p>Salary</p>
 
               <div style={{position:'relative'}}>
 
-                <input></input>
-                <select  name='salary'   onChange={handleChange} >
-            
-                    <option value=""></option>
+                <input name='salary' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Salary' onClick={()=>{currency.current.click()}}></input>
+                <span className='error'>{formik.touched.salary && formik.errors.salary}</span>
+                <select  name='currency_id'    onBlur={formik.handleChange}  ref={currency} >
+                <option selected hidden>- EGP -</option>
+
                 {currencies.map((currency)=>{
 
                     return(
@@ -382,7 +412,7 @@ const CreateMember = () => {
 
             <div>
               <p>Work Type</p>
-              <select name='WorkType_id' >
+              <select name='WorkType_id' onChange={formik.handleChange} >
 
               {worktype.map((w)=>{
 
@@ -395,11 +425,15 @@ const CreateMember = () => {
               </select>
             </div>
 
-            <Selectinput header='Governorate' name='government_id' data={governorate} fun={handleIndex}/>
+            <div>
+              <Selectinput header='Governorate' name='government_id' data={governorate} fun={handleIndex}/>
+
+            </div>
+
 
             <div>
               <p>Gender</p>
-              <select name='gender_id' >
+              <select name='gender_id' onBlur={formik.handleChange} >
                
               {gender.map((g)=>{
 
@@ -410,12 +444,19 @@ const CreateMember = () => {
                     })}
               </select>
             </div>
+              <div>
+              <p>Address</p>
+              <input name='address' type='text'  onChange={formik.handleChange}onBlur={formik.handleBlur} placeholder='Address' ></input>
+            </div>
             <div>
               <p>Department</p>
-              <select name='departments' onChange={(e)=> {push(e,'department')}} >
+              <select name='departments' onChange={(e)=> {push(e,'department');handleIndexes(e)}} >
+
+              <option selected hidden>-- select Department --</option>
+
                {departments.map((department)=>{
                 return(
-                    <option>{department.title}</option>
+                    <option name={department.id}>{department.title}</option>
                 )
 
                })}
@@ -446,10 +487,12 @@ const CreateMember = () => {
 
             <div>
               <p>Specialization</p>
-              <select name='subdepartments' onChange={(e)=>{push(e,'spec')}} >
+              <select name='subdepartments' onChange={(e)=>{push(e,'spec');handleIndexes(e)}} >
+              <option selected hidden>-- select Specialization --</option>
+
                 {selecttechnology.map((department)=>{
                       return(
-                          <option key={department.id}>{department.name}</option>
+                          <option name={department.id}>{department.name}</option>
                       )
 
                     })}
@@ -481,15 +524,16 @@ const CreateMember = () => {
              <div>
               <p>Technologies</p>
               <div style={{display:'flex' ,flexDirection:'row',justifyContent:'flex-start',gap:'20px',alignItems:'center'}}>
-                <select  ref={techInput}  required >
+                <select name='technologies'  ref={techInput} onChange={(e)=>{ push( techInput, 'tech');handleIndexes(e)}}  >
+                <option selected hidden>-- select Technology --</option>
+
                     {selecttechnology.map((department)=>{
                     return(
-                        <option key={department.id}>{department.name}</option>
+                        <option name={department.id}>{department.name}</option>
                     )
 
                   })}
                 </select>
-                <div className='addLink' onClick={()=>{ push( techInput, 'tech')}}   ><img src={plus} alt='addlink'/></div>
               </div>
             </div>
            { technology[0]&&
@@ -520,11 +564,11 @@ const CreateMember = () => {
          
 
         </div>
-         <input type='submit' value='click' /> 
+         <input type='submit' ref={submitBtn}  hidden/> 
       </form>
       
       <div className='dash__form-confirm'>
-       <Link to ='/projects'  type='submit' onClick={()=>{handleSubmit()}}>create</Link>
+       <Link    onClick={()=>{submitBtn.current.click()}}>create</Link>
         <Link>back</Link>
         
       </div>

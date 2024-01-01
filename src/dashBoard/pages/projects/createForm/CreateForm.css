@@ -5,29 +5,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: auto;
   margin: 1rem 0;
  
 }
 .dash__form p{
-  color: #292D32;
-  font-family: Lato;
+  color: var(--textcolor);
   font-size: 16px;
   font-weight: 500;
 }
-input,select{
+input,select,textarea{
  border: none;
   width: calc(100% - 55px);
   min-width: 100px;
  height: 40px;
  border-radius: 5px;
- border: 1px solid #ddd ;
- box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.10);
- padding: .5rem;
- color: #797979;
+ border: 1px solid rgb(218, 218, 218);
+  padding: .5rem;
+ color: var(--textcolor);
  font-family: var(--my_font);
  font-size: 14px;
  font-weight: 400;
+ background-color: transparent;
 }
 
 .dash__form-header{
@@ -39,7 +37,8 @@ input,select{
   padding: 1rem;
   gap: 5px;
   border-radius: 10px 10px 0px 0px;
-background: var(--blue);
+  background: #1370E4;
+  position: relative;
 }
 .dash__form form{
   display: flex;
@@ -48,12 +47,11 @@ background: var(--blue);
   width: 100%;
   height: 100%;
   padding: 1.5rem;
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
-  border: .5px solid rgba(0, 0, 0, 0.10);
+  border: 1px solid transparent;
   border-radius:0 0 3px;
-  background: #FFF;
-  gap: 3%;
-  overflow: auto;
+  background: var(--backgroundCard);
+  gap: 2rem;
+  box-shadow: 0 1px 2px rgba(56,65,74,.1)
 }
 .dash__form-logo{
   width: 150px;
@@ -63,7 +61,7 @@ background: var(--blue);
   align-items: center;
   gap: 10px;
   justify-content: flex-start;
-  background-color: #fff;
+  background-color:transparent;
   cursor: pointer;
 }
 .dash__form-logo-img{
@@ -82,7 +80,7 @@ background: var(--blue);
 
 }
 .dash__form-logo p{
-  color: var(--1, #4F9CD1);
+  color: var(--blue);
   font-family: Lato;
   font-size: 14px;
   font-weight: 400;
@@ -120,6 +118,7 @@ background: var(--blue);
   width: 25%;
   min-width: 180px;
   gap: 5px 0;
+  position: relative;
 }
 
 .addLink{
@@ -145,7 +144,6 @@ background: var(--blue);
   gap: 10px 20px ;
   /* margin: 1.3rem 0; */
   width: 100%;
-  height: 100%;
   /* padding: 1rem 0; */
   max-height: 136px;
   overflow-y: auto;
@@ -181,7 +179,7 @@ background: var(--blue);
 .dash__form-content_links-link-a a {
   text-decoration: none;
   color: var(--1, #4F9CD1);
-  font-family: Lato;
+  font-family: var(--my_font);
   font-size: 14px;
   font-weight: 400;
   width: 100%;
@@ -211,7 +209,7 @@ background: var(--blue);
   margin: .5rem 0;
 }
 .dash__form-content_attach-header p{
-  color: #292D32;
+  color:var(--textColor);
   font-family: Lato;
   font-size: 16px;
   font-weight: 500;
@@ -367,13 +365,9 @@ position: relative;
   overflow: hidden ;
  white-space: pre-wrap; 
  word-wrap: break-word;
- box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
-
  height: 100px; /* Set the desired height */
  border-radius: 5px;
- background: #FFF;
- border: none;
- box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
+ background: var(--backgroundCard);
  overflow-y: auto;
  /* resize: none; */
  color: #292D32;
@@ -413,6 +407,11 @@ align-items: center;
 border-radius: 5px;
 border: 0.8px solid var(--blue);
 background-color: #fff;
+}
+
+
+.inputError{
+  border: 1.5px solid red;
 }
 
 

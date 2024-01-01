@@ -6,16 +6,15 @@ import user from '../../../assets/fields/solar_user-rounded-linear.svg'
 import cardimg from '../../../assets/fields/Ellipse 3260.svg'
 import Personcard from '../../../components/personCard/Personcard';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import plus from '../../../assets/Form/icons.svg'
 import { Link } from 'react-router-dom'
 import { serverApi } from '../../../../App';
+import { Axios } from '../../../api/Axios';
 
 
 const Allfields = () => {
 
   const {id}= useParams();
-  const server =useContext(serverApi)
   const[fetch, setFetch] = useState([]);
   const[employees, setEmployees] = useState([]);
   const[index, setIndex] = useState(0);
@@ -28,9 +27,9 @@ const Allfields = () => {
   }
   const fetchPost = async () => {
     try {
-      await axios({
+      await Axios({
         method: "Get",
-         url: `${server}/departments/${id}/subdepartments`,
+         url: `/departments/${id}/subdepartments`,
       }).then((res)=> {setFetch( res.data.data.specializations )});
 
      
@@ -41,9 +40,9 @@ const Allfields = () => {
 
   const fetchEmployees=async()=>{
     try {
-      await axios({
+      await Axios({
         method: "Get",
-         url: `${server}/technology-employees/${in1}`,
+         url: `/technology-employees/${in1}`,
       }).then((res)=> {setEmployees( res.data.data.Employees );});
      
      
@@ -66,14 +65,14 @@ const Allfields = () => {
     <div className='dash__create'>
       <div className='dash__create-head'>
 
-        <h4 style={{fontSize:' 16px'}}>{fetch.length} &nbsp; Total Specialization are added</h4>
+        <h4 ><span>{fetch.length}</span> Total Specialization are added</h4>
           
       </div>
-      {/* <Link to='/specialization' className='dash__create-button'>
+      <Link to='/specialization' className='dash__create-button'>
           
           <img src={plus} alt='plus'/>
           <h2>Specialization</h2>
-        </Link> */}
+        </Link>
     </div>
 
 
@@ -145,6 +144,11 @@ const Allfields = () => {
          
         </div>
       </form>
+      <div className='dash__form-confirm'>
+        <Link  type='submit' hidden>create</Link>
+        <Link to='/Department'>back</Link>
+        
+      </div>
     </div>
     </>
   )
